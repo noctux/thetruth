@@ -5,7 +5,7 @@
 Well, now it does.
 
 A contemporary XMPP plugin for weechat based on the fantastic
-[[http://www.igniterealtime.org/projects/smack/index.jsp][smack library]].
+[[https://www.igniterealtime.org/projects/smack/][Smack library]].
 
 * Status
 
