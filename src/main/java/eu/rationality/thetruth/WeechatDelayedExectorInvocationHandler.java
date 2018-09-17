@@ -34,6 +34,10 @@ public class WeechatDelayedExectorInvocationHandler implements InvocationHandler
 				}
 			} catch (IllegalAccessException | IllegalArgumentException
 					| InvocationTargetException e) {
+				// TODO: You most certainly do not swallow 'e' here as
+				// it may result in extended debugging sessions :) Why not
+				// printErr() it? Ulitmately consider switching to
+				// java.util.logging (JUL).
 				return Weechat.WEECHAT_RC_ERROR;
 			}
 		});
