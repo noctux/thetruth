@@ -191,6 +191,8 @@ public class Server {
 				@Override
 				public void onCarbonCopyReceived(Direction direction, Message carbonCopy, Message wrappingMessage) {
 					Weechat.register_pending_operation(() -> {
+						// TODO: I'am not sure why you use asEntityBareJidIfPossible() here, but if you just want
+						// to strip the resourcepart, simply use asBareJid() (which does not produce null values)
 						String from = carbonCopy.getFrom().asEntityBareJidIfPossible().toString();
 						if (from == null) {
 							from = carbonCopy.getFrom().toString();
@@ -214,6 +216,7 @@ public class Server {
 	}
 
 	public void disconnect() {
+		// TODO: IIRC you don't have to check if the connection is connected.
 		if (con.isConnected()) {
 			con.disconnect();
 		}

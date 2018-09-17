@@ -25,11 +25,13 @@ public class App
 					System.out.println("Received message from " + from + ": " + message);
 				}
 			});
+			// TODO: Use JidCreate.entityBareFrom() instead of from()
 			EntityBareJid jid = JidCreate.from("noctux@jabber.ccc.de").asEntityBareJidIfPossible();
 			Chat chat = chatManager.chatWith(jid);
 			chat.send("HEY, what's up?");
 			
 			var roster = Roster.getInstanceFor(connection);
+			// TODO: The roster should already be loaded if I'm not mistaken, so no need to call reloadAndWait()
 			roster.reloadAndWait();
 			System.out.println("Entries: " + roster.getEntries().size());
 			roster.getEntries().stream().forEach(x -> System.out.println(x.getName() + " " + x.getJid() + " " + x.toString()));
