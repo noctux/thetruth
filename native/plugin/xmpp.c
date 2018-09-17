@@ -71,6 +71,14 @@ static inline void report_jni_exception(const char *file, const unsigned int lin
 	const char *mstr = (*env)->GetStringUTFChars(env, message, NULL);
 
 	report_error("%s:%u: Uncaught exception %s: %s", file, line, cstr, mstr);
+#ifdef DEBUG
+	jmethodID mid    = (*env)->GetStaticMethodID(env, api_class, "print_backtrace", "(Ljava/lang/Throwable;)V");
+	if (mid == NULL) {
+		report_error("%s: Failed to resolve method Weechat.print_backtrace, skipping backtrace");
+	} else {
+		(*env)->CallStaticVoidMethod(env, api_class, mid, e);
+	}
+#endif
 
 	(*env)->ReleaseStringUTFChars(env, classname, cstr);
 	(*env)->ReleaseStringUTFChars(env, message, mstr);
@@ -275,13 +283,18 @@ static bool
 create_vm(const char *classpath)
 {
 	JavaVMInitArgs vm_args;
-	JavaVMOption options[1];
+	JavaVMOption options[2];
 	const char *classpathflag = "-Djava.class.path=";
 	char cp[strlen(classpathflag) + 1 + strlen(classpath) + 1];
 	snprintf(cp, sizeof(cp)/sizeof(*cp), "%s%s", classpathflag, classpath);
 	options[0].optionString = cp;
-	vm_args.version = JNI_VERSION_10;
+#ifdef DEBUG
+	options[1].optionString = "-Dsmack.debugEnabled=true";
+	vm_args.nOptions = 2;
+#else
 	vm_args.nOptions = 1;
+#endif
+	vm_args.version = JNI_VERSION_10;
 	vm_args.options = options;
 	vm_args.ignoreUnrecognized = false;
 	int ret = JNI_CreateJavaVM(&jvm, (void**)&env, &vm_args);

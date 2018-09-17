@@ -4,6 +4,8 @@
 #include <jni.h>
 #include <assert.h>
 
+#define DEBUG
+
 #define UNUSED(X) (void) X;
 
 extern struct t_weechat_plugin *weechat_plugin;

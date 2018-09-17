@@ -66,6 +66,17 @@
 			<artifactId>smack-extensions</artifactId>
 			<version>4.3.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.igniterealtime.smack</groupId>
+			<artifactId>smack-experimental</artifactId>
+			<version>4.3.0</version>
+		</dependency>
+		<!-- Debugging -->
+		<dependency>
+			<groupId>org.igniterealtime.smack</groupId>
+			<artifactId>smack-debug</artifactId>
+			<version>4.3.0</version>
+		</dependency>
 		<!-- Junit -->
 		<dependency>
 			<groupId>junit</groupId>

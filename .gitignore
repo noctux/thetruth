@@ -1,0 +1,7 @@
+/target/
+/weechat
+*.d
+*.o
+*.so
+workspace
+*.class

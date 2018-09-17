@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
+#include "checkcopiedconstants.h"
 #include "xmpp.h"
 #include "signaling.h"
 #include "java/eu_rationality_thetruth_Weechat.h"
@@ -121,4 +122,18 @@ JNIEXPORT void JNICALL Java_eu_rationality_thetruth_Weechat_nicklist_1remove_1al
 
 	struct t_gui_buffer *buffer = bufferid_to_pointer(bufferid);
 	weechat_nicklist_remove_all(buffer);
+}
+
+JNIEXPORT void JNICALL Java_eu_rationality_thetruth_Weechat_nicklist_1nick_1set
+  (JNIEnv *env, jclass class, jlong bufferid, jlong nickid, jstring jproperty, jstring jval)
+{
+	UNUSED(class);
+
+	JGETSTRING(property, jproperty);
+	JGETSTRING(value, jval);
+	struct t_gui_buffer *buffer = bufferid_to_pointer(bufferid);
+	struct t_gui_nick *nick = nickid_to_pointer(nickid);
+	weechat_nicklist_nick_set(buffer, nick, property, value);
+	JRELEASESTRING(value, jval);
+	JRELEASESTRING(property, jproperty);
 }

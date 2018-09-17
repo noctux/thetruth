@@ -3,6 +3,9 @@ package eu.rationality.thetruth;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Supplier;
+
+import org.jivesoftware.smack.SmackConfiguration;
+
 import java.util.*;
 
 class Weechat {
@@ -10,9 +13,37 @@ class Weechat {
 	static class WeechatCallException extends Exception {
 	};
 	
+	/* return codes for plugin functions */
 	static final int WEECHAT_RC_OK     =  0;
 	static final int WEECHAT_RC_OK_EAT =  1;
 	static final int WEECHAT_RC_ERROR  = -1;
+	
+	/* return codes for config read functions/callbacks */
+	static final int WEECHAT_CONFIG_READ_OK              =  0;
+	static final int WEECHAT_CONFIG_READ_MEMORY_ERROR    = -1;
+	static final int WEECHAT_CONFIG_READ_FILE_NOT_FOUND  = -2;
+
+	/* return codes for config write functions/callbacks */
+	static final int WEECHAT_CONFIG_WRITE_OK             =  0;
+	static final int WEECHAT_CONFIG_WRITE_ERROR          = -1;
+	static final int WEECHAT_CONFIG_WRITE_MEMORY_ERROR   = -2;
+	
+	/* null value for option */
+	static final String WEECHAT_CONFIG_OPTION_NULL       = "null";
+
+	/* return codes for config option set */
+	static final int WEECHAT_CONFIG_OPTION_SET_OK_CHANGED       =  2;
+	static final int WEECHAT_CONFIG_OPTION_SET_OK_SAME_VALUE    =  1;
+	static final int WEECHAT_CONFIG_OPTION_SET_ERROR            =  0;
+	static final int WEECHAT_CONFIG_OPTION_SET_OPTION_NOT_FOUND = -1;
+
+	/* return codes for config option unset */
+	static final int WEECHAT_CONFIG_OPTION_UNSET_OK_NO_RESET    =  0;
+	static final int WEECHAT_CONFIG_OPTION_UNSET_OK_RESET       =  1;
+	static final int WEECHAT_CONFIG_OPTION_UNSET_OK_REMOVED     =  2;
+	static final int WEECHAT_CONFIG_OPTION_UNSET_ERROR          = -1;
+
+
 	
 	// Weechat is singlethreaded: therefore we need a mechanism to transform
 	// asynchronous operations into callbacks triggered from the main loop
@@ -45,12 +76,16 @@ class Weechat {
 	native static void buffer_set(long bufferid, String property, String value);
 	// Callback for input received
 	public static int buffer_input_callback(long bufferid, String data) {
-		print(0, "Echo " + data);
-		return WEECHAT_RC_OK;
+		Buffer b = BufferManager.getinstance().byid(bufferid);
+		if (b == null) {
+			printerr(0, "Input callback received for buffer " + Long.toHexString(bufferid) + " which is not managed by the plugin");
+			return WEECHAT_RC_ERROR;
+		}
+		return b.handleInput(data);
 	}
 	// Callback for buffer close events
 	public static int buffer_close_callback(long bufferid) {
-		print(0, "Buffer " + bufferid + " closed");
+		BufferManager.getinstance().deregister(bufferid);
 		return WEECHAT_RC_OK;
 	}
 
@@ -58,9 +93,18 @@ class Weechat {
 	native static long nicklist_add_nick(long bufferid, String nick, String color, String prefix);
 	native static void nicklist_remove_nick(long bufferid, long nickid);
 	native static void nicklist_remove_all(long bufferid);
+	native static void nicklist_nick_set(long bufferid, long nickid, String property, String value);
 
 	public static void printerr(long bufferid, String str) {
 		print_prefix(bufferid, "error", str);
+	}
+	
+	public static void print_backtrace(Throwable t) {
+		var frames = t.getStackTrace();
+		Weechat.printerr(0, "Backtrace:\n");
+		for (var f : frames) {
+			Weechat.printerr(0,  "   " + f.toString());
+		}
 	}
 
 	public static void test(int a) {
@@ -87,6 +131,7 @@ class Weechat {
 	}
 	
 	public static int init() {
+		SmackConfiguration.DEBUG = true;
 		try {
 			// Todo: parse from cfg
 			String pw = System.getenv("TRUTH_PASS");
@@ -114,8 +159,37 @@ class Weechat {
 	}
 
 	public static int command_callback(long bufferid, String cmd, String[] args) {
-		String reconstructed = Arrays.stream(args).reduce("/" + cmd, (a, b) -> a + " " + b);
-		print(0, reconstructed);
-		return WEECHAT_RC_OK;
+		Buffer b = BufferManager.getinstance().byid(bufferid);
+		if (b == null) {
+			// For hooked commands: legit behaviour: hooked command invoked on other (e.g. irc) buffer
+			return WEECHAT_RC_OK;
+		}
+		return b.receiveCommand(cmd, args);
 	}
+	
+	// Longs are native ids
+	native static boolean config_boolean(long option);
+	native static String config_color(long option);
+	native static void config_free(long config_file);
+	native static long config_get(String option_name);
+	native static int config_integer(long option);
+	native static long config_new(String name);
+	public static int config_reload_callback(long config_file_id) {
+		// TODO
+		return WEECHAT_CONFIG_READ_OK;
+	}
+	/*
+	 * weechat.config_new
+	 * weechat.config_new_option
+	 * weechat.config_new_section
+	 * weechat.config_option_free
+	 * weechat.config_option_set
+	 * weechat.config_read
+	 * weechat.config_reload
+	 * weechat.config_search_option
+	 * weechat.config_string
+	 * weechat.config_write
+	 * weechat.config_write_line
+	 * weechat.config_write_option
+	 */
 }

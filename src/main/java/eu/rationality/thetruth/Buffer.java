@@ -27,8 +27,12 @@ public abstract class Buffer {
 		Weechat.print_prefix(nativeID(), "error", str);
 	}
 	
-	public void printMsgDateTags(long time, String sender, String data,String tags) {
-		Weechat.print_date_tags(nativeid, time, tags + ",nick_"+sender+",host_"+sender, data);
+	public void print_prefix(String prefix, String msg) {
+		Weechat.print_prefix(nativeID(), prefix, msg);
+	}
+	
+	public void printMsgDateTags(long time, String sender, String data, String tags) {
+		Weechat.print_date_tags(nativeid, time, tags + ",nick_"+sender+",host_"+sender, sender + "\t" + data);
 	}
 	
 	public void sendMsg() {

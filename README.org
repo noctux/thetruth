@@ -1,0 +1,23 @@
+* The truth
+
+/"does the truth come and smack you in the face?"/ -- Samuel Vimes, The Truth
+
+Well, now it does.
+
+A contemporary XMPP plugin for weechat based on the fantastic
+[[http://www.igniterealtime.org/projects/smack/index.jsp][smack library]].
+
+* Status
+
+Please note that this plugin is currently not even alpha quality.
+
+* Building
+
+Currently builds against java10 on archlinux. To build on other platforms,
+adapt the filepath's in =native/plugin/Makefile= and the =LD_LIBRARY_PATH=
+variable in the call below.
+
+#+BEGIN_SRC bash
+make
+LD_LIBRARY_PATH=/usr/lib/jvm/java-10-openjdk/lib/server weechat -d ./weechat
+#+END_SRC
