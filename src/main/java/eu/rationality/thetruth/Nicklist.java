@@ -16,7 +16,7 @@ import org.jxmpp.jid.Jid;
 public class Nicklist implements RosterEntries, RosterListener, PresenceListener {
 	private ServerBuffer buffer;
 	private Roster roster;
-	private Map<BareJid, Nick> jid2nick = new HashMap<BareJid, Nick>();
+	private Map<BareJid, Nick> jid2nick = new HashMap<>();
 	
 	public Nicklist(ServerBuffer buffer, Roster roster) {
 		this.buffer = buffer;
