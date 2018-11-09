@@ -14,7 +14,7 @@ sourceCompatibility = JavaVersion.VERSION_1_10
 mainClassName = 'eu.rationality.thetruth.App'
 
 ext {
-	smackVersion = "4.3.0"
+	smackVersion = "4.3.1"
 }
 
 repositories {
