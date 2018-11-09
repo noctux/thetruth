@@ -125,7 +125,7 @@ public class Server {
 			@Override
 			public void authenticated(XMPPConnection connection, boolean resumed) {
 				Weechat.register_pending_operation(() -> {
-					serverbuffer.print("Authenticated as " + connection.getUser().toString());
+					serverbuffer.print("Authenticated as " + connection.getUser());
 					return Weechat.WEECHAT_RC_OK;
 				});
 			}

@@ -31,6 +31,7 @@ public class ServerBuffer extends Buffer {
 		server.getServerbuffer().printMsgDateTags(0, "me", receiver + ": " + msg, "notify_msg,self_msg,log1");
 	}
 	
+	@Override
 	public int handleInput(String input) {
 		String[] split = Pattern.compile(":\\s+").split(input, 2);
 		if (split.length != 2) {
@@ -72,6 +73,7 @@ public class ServerBuffer extends Buffer {
 		return super.receiveCommand(cmd, args);
 	}
 
+	@Override
 	public void closeCallback() {
 		super.closeCallback();
 		server.disconnect();

@@ -15,7 +15,7 @@ public class BufferManager {
 	}
 	
 	private BufferManager() {
-		this.id2buffer = new HashMap<Long, Buffer>();
+		this.id2buffer = new HashMap<>();
 	}
 	
 	public Buffer byid(long id) {

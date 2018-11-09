@@ -1,7 +1,5 @@
 package eu.rationality.thetruth;
 
-import java.util.Set;
-
 import eu.rationality.thetruth.Weechat.WeechatCallException;
 
 public abstract class Buffer {
