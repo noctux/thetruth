@@ -1,0 +1,35 @@
+plugins {
+	id 'application'
+	id 'eclipse'
+	id 'java'
+
+	id 'com.github.johnrengelman.shadow' version '4.0.2'
+}
+
+group 'de.rationality.thetruth'
+version = rootProject.file('version').text.trim()
+
+sourceCompatibility = JavaVersion.VERSION_1_10
+
+mainClassName = 'eu.rationality.thetruth.App'
+
+ext {
+	smackVersion = "4.3.0"
+}
+
+repositories {
+	mavenCentral()
+	maven {
+		url "https://igniterealtime.org/repo/"
+	}
+}
+
+dependencies {
+	implementation "org.igniterealtime.smack:smack-java7:$smackVersion"
+	implementation "org.igniterealtime.smack:smack-tcp:$smackVersion"
+	implementation "org.igniterealtime.smack:smack-extensions:$smackVersion"
+	implementation "org.igniterealtime.smack:smack-experimental:$smackVersion"
+	implementation "org.igniterealtime.smack:smack-debug:$smackVersion"
+
+	testCompile group: 'junit', name: 'junit', version: '4.12'
+}

@@ -11,8 +11,14 @@
 #include "xmpp.h"
 #include "signaling.h"
 
+#define xstr(s) str(s)
+#define str(s) #s
+
 #define WEECHAT_JAPI_CLASS "eu/rationality/thetruth/Weechat"
-#define JAR_NAME           "the-truth-1.0-SNAPSHOT-jar-with-dependencies.jar"
+#define JAR_NAME								\
+	"thetruth-"									\
+	xstr(THE_TRUTH_VERSION)						\
+	"-all.jar"
 
 WEECHAT_PLUGIN_NAME("thetruth")
 WEECHAT_PLUGIN_DESCRIPTION("XMPP-Plugin for WeeChat")

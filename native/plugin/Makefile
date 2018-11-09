@@ -5,10 +5,11 @@ WARNINGS := -Wall -Wextra -pedantic -Wshadow -Wpointer-arith -Wcast-align \
 			-Wno-variadic-macros # Disabled due to weechat-plugin.h
           # -Wstrict-prototypes # Disabled due to weechat-plugin.h
 INCLUDES := -I/usr/include/weechat \
-            -I/usr/lib/jvm/java-10-openjdk/include -I/usr/lib/jvm/java-10-openjdk/include/linux
-LINKLIBS := -L/usr/lib/jvm/java-10-openjdk/lib/server -ljvm -pthread
+            -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux
+LINKLIBS := -L$(JAVA_HOME)/lib/server -ljvm -pthread
 
-CFLAGS   := -g -std=c11 -fPIC -pthread -D_XOPEN_SOURCE=500 $(WARNINGS) $(INCLUDES)
+THE_TRUTH_VERSION=$(shell cat ../../version)
+CFLAGS   := -g -std=c11 -fPIC -pthread -D_XOPEN_SOURCE=500 -DTHE_TRUTH_VERSION=$(THE_TRUTH_VERSION) $(WARNINGS) $(INCLUDES)
 LDFLAGS  := -shared -fPIC
 
 SRCFILES := $(wildcard *.c)

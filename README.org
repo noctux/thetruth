@@ -13,11 +13,12 @@ Please note that this plugin is currently not even alpha quality.
 
 * Building
 
-Currently builds against java10 on archlinux. To build on other platforms,
-adapt the filepath's in =native/plugin/Makefile= and the =LD_LIBRARY_PATH=
-variable in the call below.
-
 #+BEGIN_SRC bash
 make
-LD_LIBRARY_PATH=/usr/lib/jvm/java-10-openjdk/lib/server weechat -d ./weechat
+#+END_SRC
+
+* Running
+
+#+BEGIN_SRC bash
+make run
 #+END_SRC

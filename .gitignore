@@ -1,7 +1,12 @@
-/target/
+/build/
 /weechat
 *.d
 *.o
 *.so
 workspace
 *.class
+
+/.classpath
+/.project
+/.settings/
+/.gradle/
