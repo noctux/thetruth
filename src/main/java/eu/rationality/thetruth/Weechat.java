@@ -1,12 +1,13 @@
 package eu.rationality.thetruth;
 
-import java.util.Arrays;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Supplier;
 
 import org.jivesoftware.smack.SmackConfiguration;
-
-import java.util.*;
+import org.jivesoftware.smack.util.StringUtils;
+import org.jxmpp.jid.EntityBareJid;
+import org.jxmpp.jid.impl.JidCreate;
+import org.jxmpp.jid.util.JidUtil;
 
 class Weechat {
 	@SuppressWarnings("serial")
@@ -135,8 +136,19 @@ class Weechat {
 		try {
 			// Todo: parse from cfg
 			String pw = System.getenv("TRUTH_PASS");
+			String jidEnv = System.getenv("TRUTH_JID");
+
+			final String user, domain;
+			if (jidEnv != null && JidUtil.isTypicalValidEntityBareJid(jidEnv)) {
+				EntityBareJid jid = JidCreate.entityBareFrom(jidEnv);
+				user = jid.getLocalpart().toString();
+				domain = jid.getDomain().toString();
+			} else {
+				user = "thetrhuthtest";
+				domain = "dismail.de";
+			}
 			Server[] servers = {
-					new Server("dismail.de", "thetruthtest", pw, null)
+					new Server(domain, user, pw, null),
 			};
 			
 			for(Server s: servers) {
