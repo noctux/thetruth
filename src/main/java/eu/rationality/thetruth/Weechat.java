@@ -144,8 +144,7 @@ class Weechat {
 				user = jid.getLocalpart().toString();
 				domain = jid.getDomain().toString();
 			} else {
-				user = "thetrhuthtest";
-				domain = "dismail.de";
+				throw new Exception("Invalid JID specified from environment");
 			}
 			Server[] servers = {
 					new Server(domain, user, pw, null),
