@@ -132,6 +132,7 @@ class Weechat {
 	}
 	
 	public static int init() {
+		print(0, "Java Init");
 		SmackConfiguration.DEBUG = true;
 		try {
 			// Todo: parse from cfg
@@ -154,6 +155,7 @@ class Weechat {
 				s.connect();
 			}
 		} catch (Exception e) {
+			printerr(0, "Java Init failed");
 			return WEECHAT_RC_ERROR;
 		}
 		
